@@ -71,7 +71,7 @@ public interface AdminOrderClient {
     CommonResponse<ShipmentResponse> updateShipmentDeliveredAt(
             @PathVariable("orderId") long orderId,
             @RequestParam
-            @DateTimeFormat(pattern = "yy. MM. dd. a h:mm") LocalDateTime deliveredAt);
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deliveredAt);
 
 
 
