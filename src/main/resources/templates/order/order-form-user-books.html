@@ -9,13 +9,13 @@
     <script src="https://js.tosspayments.com/v1/payment"></script>
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
+
 <body class="bg-gray-100">
 <div th:replace="~{layout/fragments/header :: headerFragment}"></div>
+
 <main class="container max-w-[1600px] mx-auto px-4 py-8">
     <div class="flex flex-col lg:flex-row gap-10">
 
@@ -24,36 +24,31 @@
             <!-- 주문 상품 목록 -->
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold mb-4">주문 상품</h2>
-                <!-- 주문 상품 카드: 가로 정렬 -->
+
                 <div th:each="item : ${cart}"
                      class="cart-item bg-white p-4 rounded-xl shadow text-sm flex items-center gap-6 mb-4"
                      th:attr="data-book-id=${item.bookId}, data-price=${item.saleBookPrice}, data-quantity=${item.quantity}">
 
-                    <!-- 이미지 -->
                     <div class="w-16 flex-shrink-0">
                         <img th:src="${item.thumbnailUrl}" alt="도서 이미지"
                              class="w-full h-auto rounded border border-gray-200">
                     </div>
 
-                    <!-- 상품명 -->
                     <div class="min-w-[130px]">
                         <div class="text-gray-500 text-xs">상품명</div>
                         <div class="font-medium text-gray-800" th:text="${item.bookTitle}">도서 제목</div>
                     </div>
 
-                    <!-- 정가 -->
                     <div class="min-w-[70px]">
                         <div class="text-gray-500 text-xs">정가</div>
                         <div th:text="${#numbers.formatInteger(item.originalBookPrice, 0, 'COMMA') + '원'}">정가</div>
                     </div>
 
-                    <!-- 수량 -->
                     <div class="min-w-[60px]">
                         <div class="text-gray-500 text-xs">수량</div>
                         <div th:text="${item.quantity + '개'}">0개</div>
                     </div>
 
-                    <!-- 할인금액 -->
                     <div class="min-w-[90px]">
                         <div class="text-gray-500 text-xs">할인금액</div>
                         <div class="text-red-600 font-semibold"
@@ -63,9 +58,9 @@
                         <div class="text-xs text-red-500"
                              th:if="${item.bookDiscountRate != null}"
                              th:text="|(${item.bookDiscountRate}% ↓)|">
-                        </div>                    </div>
+                        </div>
+                    </div>
 
-                    <!-- 합계 -->
                     <div class="min-w-[90px] text-right">
                         <div class="text-gray-500 text-xs">합계</div>
                         <div class="text-base font-bold text-gray-900"
@@ -74,10 +69,8 @@
                         </div>
                     </div>
 
-                    <!-- 포장지 + 쿠폰 선택 (세로 배치) -->
                     <div class="w-full flex flex-col gap-4 mt-4">
 
-                        <!-- 포장지 선택 -->
                         <div class="flex items-center gap-2">
                             <label class="text-sm font-medium text-gray-700 whitespace-nowrap w-[90px]">포장지 선택</label>
                             <select class="packaging-select ink-input-field w-full sm:w-[240px]"
@@ -94,7 +87,6 @@
                             </select>
                         </div>
 
-                        <!-- 쿠폰 선택 -->
                         <div class="flex items-center gap-2">
                             <label class="text-sm font-medium text-gray-700 whitespace-nowrap w-[90px]">쿠폰 선택</label>
                             <select class="ink-input-field w-full sm:w-[240px]"
@@ -103,15 +95,14 @@
                                     th:disabled="${item.applicableCoupons == null or item.applicableCoupons.isEmpty()}"
                                     th:classappend="${item.applicableCoupons == null or item.applicableCoupons.isEmpty()} ? ' bg-gray-100 text-gray-400 cursor-not-allowed'">
 
-                                <!-- 쿠폰이 없는 경우 -->
                                 <option th:if="${item.applicableCoupons == null or item.applicableCoupons.isEmpty()}" disabled selected>
                                     쿠폰 선택 불가
                                 </option>
 
-                                <!-- 쿠폰이 있는 경우 -->
                                 <option th:if="${item.applicableCoupons != null and !item.applicableCoupons.isEmpty()}" value="">
                                     쿠폰 선택 안 함
                                 </option>
+
                                 <option th:each="c : ${item.applicableCoupons}"
                                         th:value="${c.storeId}"
                                         th:text="${c.couponName + ' - ' +
@@ -132,6 +123,7 @@
                                 </option>
                             </select>
                         </div>
+
                         <style>
                             select option {
                                 white-space: pre-line;
@@ -144,20 +136,14 @@
                                 cursor: not-allowed;
                                 color: #9ca3af;
                             }
-
                         </style>
 
                     </div>
-
                 </div>
-
-
             </section>
-
 
             <!-- 주문자 정보 -->
             <section class="mb-8">
-                <!-- 주문자 정보 제목 + 버튼 한 줄 배치 -->
                 <div class="flex justify-between items-center mt-10 mb-4">
                     <h2 class="text-2xl font-semibold">주문자 정보</h2>
                     <button type="button" id="loadMyInfoBtn" class="ink-btn-primary text-sm px-4 py-2">
@@ -178,10 +164,10 @@
                     </div>
                     <div>
                         <label class="block mb-1 text-sm font-medium text-gray-700">이메일</label>
-                        <input type="email" class="ink-input-field w-full" id="ordererEmail"
-                               placeholder="example@email.com">
+                        <input type="email" class="ink-input-field w-full" id="ordererEmail" placeholder="example@email.com">
                     </div>
                 </div>
+
                 <input type="hidden" id="userId" th:value="${user.id}" />
                 <input type="hidden" id="userName" th:value="${user.name}">
                 <input type="hidden" id="userPhone" th:value="${user.phone}">
@@ -190,111 +176,84 @@
 
             <!-- 배송지 정보 -->
             <section class="mb-8">
-                <!-- 배송지 정보 -->
-                <section class="mb-8">
-                    <h2 class="text-2xl font-semibold mt-10 mb-4">배송지 정보</h2>
+                <h2 class="text-2xl font-semibold mt-10 mb-4">배송지 정보</h2>
 
-                    <!-- 배송지 입력 방식 라디오 -->
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium text-gray-700">배송지 입력 방식</label>
-                        <div class="flex gap-4">
-                            <label class="flex items-center space-x-2">
-                                <input type="radio" name="addressType" value="search" checked class="accent-indigo-600">
-                                <span>주소 검색</span>
-                            </label>
-                            <label class="flex items-center space-x-2">
-                                <input type="radio" name="addressType" value="book" class="accent-indigo-600">
-                                <span>주소록</span>
-                            </label>
-                        </div>
+                <div class="mb-4">
+                    <label class="block mb-1 text-sm font-medium text-gray-700">배송지 입력 방식</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="addressType" value="search" checked class="accent-indigo-600">
+                            <span>주소 검색</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="addressType" value="book" class="accent-indigo-600">
+                            <span>주소록</span>
+                        </label>
                     </div>
+                </div>
 
-                    <!-- 주소 입력 필드 -->
-                    <div class="bg-gray-50 p-4 rounded-lg shadow space-y-6 text-sm">
-
-                        <!-- 수령인 & 연락처 -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-700">수령인</label>
-                                <input type="text" class="ink-input-field w-full" id="recipientName" placeholder="수령인">
-                            </div>
-                            <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-700">연락처</label>
-                                <input type="text" class="ink-input-field w-full" id="recipientPhone"  placeholder="010-9876-5432">
-                            </div>
-                        </div>
-
-                        <!-- 주소 -->
-                        <div class="flex flex-col gap-3">
-                            <label class="block mb-1 text-sm font-medium text-gray-700">배송 주소</label>
-                            <div class="flex flex-col space-y-[16px]">
-                                <!-- 우편번호 + 버튼 -->
-                                <div class="flex gap-2">
-                                    <input type="text" id="postalCode" class="ink-input-field w-[30%]"
-                                           placeholder="우편번호" readonly>
-                                    <button type="button" onclick="execDaumPostcode()"
-                                            class="ink-btn-primary text-sm px-4 py-2 h-full">
-                                        우편번호 찾기
-                                    </button>
-                                </div>
-
-                                <!-- 도로명 주소 -->
-                                <input type="text" id="defaultAddress" class="ink-input-field w-full"
-                                       placeholder="도로명 주소" readonly>
-
-                                <!-- 상세 주소 -->
-                                <input type="text" id="detailAddress" class="ink-input-field w-full"
-                                       placeholder="상세 주소 입력">
-
-                                <!-- 참고 주소 -->
-                                <input type="text" id="extraAddress" class="ink-input-field w-full"
-                                       placeholder="참고 주소 입력">
-                            </div>
-                        </div>
-
-                        <!-- 희망 배송일 -->
+                <div class="bg-gray-50 p-4 rounded-lg shadow space-y-6 text-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-700">희망 배송일</label>
+                            <label class="block mb-1 text-sm font-medium text-gray-700">수령인</label>
+                            <input type="text" class="ink-input-field w-full" id="recipientName" placeholder="수령인">
+                        </div>
+                        <div>
+                            <label class="block mb-1 text-sm font-medium text-gray-700">연락처</label>
+                            <input type="text" class="ink-input-field w-full" id="recipientPhone"  placeholder="010-9876-5432">
+                        </div>
+                    </div>
 
-                            <!-- 기본 배송일 안내 -->
-                            <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-2 rounded-md text-sm mb-4">
-                                기본 배송 예정일은 <strong id="defaultDeliveryDate">2025-06-02</strong> 입니다.
+                    <div class="flex flex-col gap-3">
+                        <label class="block mb-1 text-sm font-medium text-gray-700">배송 주소</label>
+                        <div class="flex flex-col space-y-[16px]">
+                            <div class="flex gap-2">
+                                <input type="text" id="postalCode" class="ink-input-field w-[30%]" placeholder="우편번호" readonly>
+                                <button type="button" onclick="execDaumPostcode()"
+                                        class="ink-btn-primary text-sm px-4 py-2 h-full">
+                                    우편번호 찾기
+                                </button>
                             </div>
 
-                            <!-- 배송일 지정 스위치 -->
-                            <div class="flex items-center gap-4 mb-4">
-                                <label for="enablePreferredDate" class="inline-flex items-center cursor-pointer">
-                                    <span class="mr-3 text-sm text-gray-700">배송일 지정</span>
-                                    <div class="relative">
-                                        <input type="checkbox" id="enablePreferredDate" class="sr-only peer">
-                                        <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-indigo-500 transition-all"></div>
-                                        <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow peer-checked:translate-x-full transition-transform"></div>
-                                    </div>
-                                </label>
-                            </div>
+                            <input type="text" id="defaultAddress" class="ink-input-field w-full" placeholder="도로명 주소" readonly>
+                            <input type="text" id="detailAddress" class="ink-input-field w-full" placeholder="상세 주소 입력">
+                            <input type="text" id="extraAddress" class="ink-input-field w-full" placeholder="참고 주소 입력">
+                        </div>
+                    </div>
 
-                            <!-- 날짜 선택 input -->
-                            <div>
-                                <input type="date" id="preferredDeliveryDateInput"
-                                       class="ink-input-field w-full sm:w-[250px] bg-white text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                       disabled
-                                       min="2025-06-02"
-                                >
-                            </div>
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">희망 배송일</label>
+
+                        <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-2 rounded-md text-sm mb-4">
+                            기본 배송 예정일은 <strong id="defaultDeliveryDate">2025-06-02</strong> 입니다.
                         </div>
 
+                        <div class="flex items-center gap-4 mb-4">
+                            <label for="enablePreferredDate" class="inline-flex items-center cursor-pointer">
+                                <span class="mr-3 text-sm text-gray-700">배송일 지정</span>
+                                <div class="relative">
+                                    <input type="checkbox" id="enablePreferredDate" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-indigo-500 transition-all"></div>
+                                    <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow peer-checked:translate-x-full transition-transform"></div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div>
+                            <input type="date" id="preferredDeliveryDateInput"
+                                   class="ink-input-field w-full sm:w-[250px] bg-white text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                   disabled
+                                   min="2025-06-02">
+                        </div>
                     </div>
-                </section>
+                </div>
 
                 <!-- 주소록 모달 -->
-                <div id="addressModal"
-                     class="fixed inset-0 bg-black/10 hidden flex items-center justify-center z-50">
+                <div id="addressModal" class="fixed inset-0 bg-black/10 hidden flex items-center justify-center z-50">
                     <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-lg font-semibold">주소록</h2>
-                            <button id="closeAddressModal"
-                                    class="text-gray-500 hover:text-gray-700 text-xl leading-none">&times;
-                            </button>
+                            <button id="closeAddressModal" class="text-gray-500 hover:text-gray-700 text-xl leading-none">&times;</button>
                         </div>
 
                         <div class="overflow-x-auto">
@@ -320,8 +279,7 @@
                                         주소
                                     </td>
                                     <td class="px-4 py-2 border" th:text="${addr.postalCode}">12345</td>
-                                    <td class="px-4 py-2 border text-center"
-                                        th:text="${addr.isDefault ? '기본' : ''}"></td>
+                                    <td class="px-4 py-2 border text-center" th:text="${addr.isDefault ? '기본' : ''}"></td>
                                     <td class="px-4 py-2 border text-center">
                                         <button type="button"
                                                 class="ink-btn-primary text-sm px-2 py-1"
@@ -341,29 +299,20 @@
                 </div>
             </section>
 
-
             <!-- 포인트 -->
             <section>
                 <h2 class="text-2xl font-semibold mt-10 mb-4">포인트</h2>
 
                 <div class="bg-gray-50 p-4 rounded-lg shadow space-y-6 text-sm">
-
-                    <!-- 포인트 입력 -->
                     <div>
                         <label class="block mb-1 text-sm font-medium text-gray-700">포인트 사용</label>
                         <div class="flex flex-col sm:flex-row gap-2 items-center">
-                            <input
-                                    type="number"
-                                    class="ink-input-field w-full sm:w-[60%]"
-                                    placeholder="사용할 포인트를 입력하세요"
-                                    name="usedPoint"
-                                    th:attr="max=${user.point}"
-                            />
-                            <button
-                                    type="button"
-                                    id="applyPointBtn"
-                                    class="ink-btn-primary w-full sm:w-[20%] text-sm"
-                            >
+                            <input type="number"
+                                   class="ink-input-field w-full sm:w-[60%]"
+                                   placeholder="사용할 포인트를 입력하세요"
+                                   name="usedPoint"
+                                   th:attr="max=${user.point}" />
+                            <button type="button" id="applyPointBtn" class="ink-btn-primary w-full sm:w-[20%] text-sm">
                                 적용
                             </button>
                             <label for="useAllPointChk" class="inline-flex items-center cursor-pointer mt-2 sm:mt-0 sm:w-[20%]">
@@ -384,7 +333,6 @@
                             </span>
                         </p>
                     </div>
-
                 </div>
             </section>
         </div>
@@ -395,7 +343,6 @@
                 <div>
                     <h2 class="text-xl font-bold border-b pb-2 mb-4">주문 요약</h2>
                     <div class="space-y-2 text-sm mb-6">
-                        <!-- 상품별 요약 반복 렌더링 -->
                         <div th:each="item : ${cart}" class="flex justify-between">
                             <span th:text="${item.bookTitle}">도서명</span>
                             <span th:text="${item.quantity + '개 / ' + (#numbers.formatInteger(item.saleBookPrice * item.quantity, 0, 'COMMA') + '원')}">0개 / 0원</span>
@@ -404,23 +351,21 @@
 
                     <h2 class="text-xl font-bold border-b pb-2 mb-4">결제 내역</h2>
                     <div class="space-y-2 text-sm">
-                        <!-- 상품 총액 -->
                         <div class="flex justify-between">
                             <span>상품 총액</span>
                             <span><span data-role="product-total">0원</span></span>
                         </div>
 
-                        <!-- 할인 -->
                         <div class="flex justify-between">
                             <span>할인</span>
                             <span data-role="coupon-discount">0원</span>
                         </div>
 
-                        <!-- 배송비 -->
                         <div class="flex justify-between">
                             <span>배송비</span>
                             <span><span data-role="shipping-fee">3,000원</span></span>
                         </div>
+
                         <script th:inline="javascript">
                             const SHIPPING_POLICY = {
                                 threshold: [[${activeShippingPolicy.threshold}]],
@@ -428,19 +373,16 @@
                             };
                         </script>
 
-                        <!-- 포장지 비용 -->
                         <div class="flex justify-between">
                             <span>포장지 비용</span>
                             <span><span data-role="packaging-total">0원</span></span>
                         </div>
 
-                        <!-- 포인트 사용 -->
                         <div class="flex justify-between">
                             <span>포인트 사용</span>
                             <span><span data-role="point-used">0원</span></span>
                         </div>
 
-                        <!-- 최종 결제 금액 -->
                         <div class="flex justify-between font-bold text-base">
                             <span>최종 결제</span>
                             <span><span data-role="final-total">0원</span></span>
@@ -451,10 +393,10 @@
                 <button type="button" onclick="submitOrderForm('TOSS')" class="ink-btn-primary mt-8 w-full text-base py-2">
                     TOSS로 결제하기
                 </button>
-
             </div>
         </div>
     </div>
+
     <!-- ✅ 0원 결제 확인 모달 -->
     <div id="zeroPaymentModal" class="fixed inset-0 bg-black/50 z-50 hidden justify-center items-center">
         <div class="bg-white rounded-xl shadow-xl p-6 max-w-lg w-full">
@@ -464,7 +406,6 @@
                 아래 결제 내역을 확인하고 주문을 진행하시겠습니까?
             </p>
 
-            <!-- 영수증 형식 결제 요약 -->
             <table class="w-full text-sm text-gray-700 mb-6">
                 <tbody>
                 <tr class="border-t">
@@ -501,28 +442,23 @@
         </div>
     </div>
 </main>
+
 <div th:replace="~{layout/fragments/footer :: footerFragment}"></div>
-</body>
-</html>
 
-
+<!-- ✅✅✅ 여기로 옮기는 게 핵심: script는 반드시 body 안쪽, footer 다음, /body 직전 -->
 <script th:inline="javascript">
-
     document.addEventListener("DOMContentLoaded", () => {
-        initDeliveryDate(); // 희망 배송일
-        initAutoHyphen(["ordererPhone", "recipientPhone"]); // 전화번호 하이폰 적용
-        initMyInfoBtn(); // 내정보 자동 입력
-        initAddressRadio(); // 주소 적용
-        initAddressModal(); // 주소 모달 띄우기
-        initCouponSelect(); // 쿠폰 적용
-        initPackagingSelect(); // 포장지 적용
-        initPointEvents(); // 포인트 적용
-        updateSummary(); // 결제 금액 계산
+        initDeliveryDate();
+        initAutoHyphen(["ordererPhone", "recipientPhone"]);
+        initMyInfoBtn();
+        initAddressRadio();
+        initAddressModal();
+        initCouponSelect();
+        initPackagingSelect();
+        initPointEvents();
+        updateSummary();
     });
 
-    /** --------------------------------------- 유틸 --------------------------------------------- */
-
-    // 📌 전화번호 하이픈 자동 입력
     function initAutoHyphen(ids) {
         ids.forEach(id => {
             const el = document.getElementById(id);
@@ -536,14 +472,10 @@
         });
     }
 
-    // 📌 화면 내 통화 포맷
     function formatCurrency(num) {
         return new Intl.NumberFormat('ko-KR').format(num) + '원';
     }
 
-    /** --------------------------------------- 내정보 입력 --------------------------------------------- */
-
-    // 📌 내 정보 자동 입력 버튼
     function initMyInfoBtn() {
         const btn = document.getElementById("loadMyInfoBtn");
         btn?.addEventListener("click", () => {
@@ -553,9 +485,6 @@
         });
     }
 
-    /** --------------------------------------- 배송지 입력  --------------------------------------------- */
-
-    // 📌 주소 입력 방식 (검색/주소록) 라디오 처리
     function initAddressRadio() {
         document.querySelectorAll('input[name="addressType"]').forEach(radio => {
             radio.addEventListener("change", (e) => {
@@ -570,7 +499,6 @@
         });
     }
 
-    // 📌 주소록 모달 이벤트
     function initAddressModal() {
         document.getElementById("closeAddressModal")?.addEventListener("click", () => {
             document.getElementById("addressModal").classList.add("hidden");
@@ -586,7 +514,7 @@
         });
     }
 
-    // 📌 다음 주소 API 호출
+    // ✅ execDaumPostcode가 전역으로 잡히도록 "body 안쪽 script"에 존재해야 함
     function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function (data) {
@@ -606,7 +534,6 @@
         }).open();
     }
 
-    // 📌 희망 배송일 초기화
     function initDeliveryDate() {
         const checkbox = document.getElementById("enablePreferredDate");
         const dateInput = document.getElementById("preferredDeliveryDateInput");
@@ -626,27 +553,23 @@
         window.getPreferredDeliveryDate = () => checkbox.checked ? dateInput.value : formatted;
     }
 
-    /** --------------------------------------- 쿠폰 및 포인트  --------------------------------------------- */
-    // 📌 쿠폰 선택 시 다른 항목 disable 처리
     function initCouponSelect() {
         updateCouponTexts();
         document.querySelectorAll('select[name="couponId"]').forEach(select => {
-            select.addEventListener('change', (e) => {
+            select.addEventListener('change', () => {
                 const selectedOption = select.selectedOptions[0];
                 const minAmount = parseInt(selectedOption?.dataset.minOrderAmount || "0", 10);
                 const price = parseInt(select.closest('.cart-item')?.dataset.price || "0", 10);
                 const quantity = parseInt(select.closest('.cart-item')?.dataset.quantity || "0", 10);
                 const productTotal = price * quantity;
 
-                // 최소 주문 금액 미달 시 선택 막기
                 if (select.value && productTotal < minAmount) {
                     alert(`이 쿠폰은 최소 ${formatCurrency(minAmount)} 이상 주문 시 사용 가능합니다.`);
-                    select.value = ''; // 선택 초기화
+                    select.value = '';
                     updateSummary();
                     return;
                 }
 
-                // 나머지 기존 로직 유지
                 const selected = select.value;
                 document.querySelectorAll('select[name="couponId"]').forEach(other => {
                     other.disabled = selected && other !== select;
@@ -656,20 +579,15 @@
                 const input = document.querySelector('input[name="usedPoint"]');
                 const before = usedPoint;
                 const useAllChk = document.getElementById('useAllPointChk');
-                if (useAllChk?.checked) {
-                    handlePointToggle(input, useAllChk);
-                } else {
-                    updateSummary();
-                }
 
-                if (usedPoint < before) {
-                    showPointAdjustedAlert(usedPoint, "할인 쿠폰 적용");
-                }
+                if (useAllChk?.checked) handlePointToggle(input, useAllChk);
+                else updateSummary();
+
+                if (usedPoint < before) showPointAdjustedAlert(usedPoint, "할인 쿠폰 적용");
             });
         });
     }
 
-    // 📌 쿠폰 초기 렌더링 시 ❌ 마크 동적 적용
     function updateCouponTexts() {
         document.querySelectorAll(".cart-item").forEach(item => {
             const price = parseInt(item.dataset.price || "0");
@@ -679,20 +597,15 @@
             item.querySelectorAll('select[name="couponId"] option').forEach(option => {
                 const minAmount = parseInt(option.dataset.minOrderAmount || "0", 10);
                 if (option.value && productTotal < minAmount) {
-                    if (!option.textContent.startsWith("❌ ")) {
-                        option.textContent = "❌ " + option.textContent;
-                    }
+                    if (!option.textContent.startsWith("❌ ")) option.textContent = "❌ " + option.textContent;
                 } else {
-                    // ❌ 제거
-                    if (option.textContent.startsWith("❌ ")) {
+                    if (option.textContent.startsWith("❌ "))
                         option.textContent = option.textContent.replace(/^❌\s*/, "");
-                    }
                 }
             });
         });
     }
 
-    // 📌 포인트 적용 및 전체 사용 처리
     function initPointEvents() {
         const input = document.querySelector('input[name="usedPoint"]');
         const applyBtn = document.getElementById('applyPointBtn');
@@ -703,7 +616,7 @@
     }
 
     let usedPoint = 0;
-    // 📌 포인트 적용 버튼 처리
+
     function handlePointApply(input, checkbox) {
         const max = parseInt(input.getAttribute("max") || "0", 10);
         const val = parseInt(input.value || "0", 10);
@@ -722,7 +635,6 @@
         updateSummary();
     }
 
-    // 📌 포인트 전체 사용 스위치 처리
     function handlePointToggle(input, checkbox) {
         const max = parseInt(input.getAttribute("max") || "0", 10);
         const { paymentAmountBeforePoint } = getSummary();
@@ -734,32 +646,20 @@
         updateSummary();
     }
 
-    // 📌 포인pointMessage트 조정 알람
     function showPointAdjustedAlert(amount, reason) {
-        // 너무 자주 뜨지 않게 방지 (1초 내에 중복 방지용)
         if (window.__lastPointAlertTime && Date.now() - window.__lastPointAlertTime < 1000) return;
         window.__lastPointAlertTime = Date.now();
-
         alert(`${reason}으로 인해 포인트 사용 금액이 ${formatCurrency(amount)}으로 조정되었습니다.`);
     }
 
-    // 📌 포장지 선택 시 총합 갱신
     function initPackagingSelect() {
         document.querySelectorAll('select.packaging-select').forEach(select =>
             select.addEventListener('change', updateSummary)
         );
     }
 
-    /** --------------------------------------- 결제 요약 화면 업데이트 --------------------------------------------- */
-    // 📌 결제 요약 업데이트
     function updateSummary() {
-        const {
-            productTotal,
-            packagingTotal,
-            couponDiscountTotal,
-            shippingFee,
-            paymentAmountBeforePoint
-        } = getSummary();
+        const { productTotal, packagingTotal, couponDiscountTotal, shippingFee, paymentAmountBeforePoint } = getSummary();
 
         const pointInput = document.querySelector('input[name="usedPoint"]');
         const maxPoint = parseInt(pointInput.getAttribute("max") || "0", 10);
@@ -788,7 +688,6 @@
 
         const paymentAmount = Math.max(paymentAmountBeforePoint - usedPoint, 0);
 
-        // 가격 렌더링은 그대로 유지
         document.querySelector('[data-role="product-total"]').textContent = formatCurrency(productTotal);
         document.querySelector('[data-role="packaging-total"]').textContent = formatCurrency(packagingTotal);
         document.querySelector('[data-role="coupon-discount"]').textContent = '-' + formatCurrency(couponDiscountTotal);
@@ -797,7 +696,6 @@
         document.querySelector('[data-role="final-total"]').textContent = formatCurrency(paymentAmount);
     }
 
-    // 📌 금액 계산 로직
     function getSummary() {
         let productTotal = 0, packagingTotal = 0, couponDiscountTotal = 0;
 
@@ -830,6 +728,7 @@
         });
 
         const shippingFee = productTotal >= SHIPPING_POLICY.threshold ? 0 : SHIPPING_POLICY.fee;
+
         return {
             productTotal,
             packagingTotal,
@@ -839,9 +738,6 @@
         };
     }
 
-
-    /** --------------------------------------- 결제 요청 --------------------------------------------- */
-    // 📌 공통 메인 결제 함수
     function submitOrderForm(requestPaymentType) {
         const requiredFields = ["ordererName", "ordererPhone", "ordererEmail", "recipientName", "recipientPhone", "postalCode", "defaultAddress", "detailAddress"];
         for (const id of requiredFields) {
@@ -856,25 +752,22 @@
             return alert("쿠폰은 한 개만 사용할 수 있습니다.");
         }
 
-        const { payload, amount, discountAmount, usedPoint, paymentType } = createOrderPayload(requestPaymentType);
+        const { payload, discountAmount, paymentType } = createOrderPayload(requestPaymentType);
 
-        // 실행하는 paymentType에 따라 함수 실행하면 됨.
         switch (paymentType) {
             case "TOSS":
                 tossRequestPayment(payload);
                 break;
             case "POINT":
                 openZeroPaymentModal(usedPoint, discountAmount);
-                window.__cachedZeroPayload = payload; // 모달 확인 후 사용할 수 있도록 임시 저장
+                window.__cachedZeroPayload = payload;
                 return;
             default:
                 console.error("지원하지 않는 결제 방식입니다:", paymentType);
         }
     }
 
-    // 📌 공통 요청 payload 만들기
     function createOrderPayload(initialType) {
-
         const getVal = id => document.getElementById(id)?.value.trim();
         const userId = parseInt(getVal("userId"), 10);
         const preferredDate = window.getPreferredDeliveryDate();
@@ -898,7 +791,6 @@
 
         const { shippingFee, couponDiscountTotal, paymentAmountBeforePoint } = getSummary();
         const finalAmount = Math.max(paymentAmountBeforePoint - usedPoint, 0);
-
         const paymentType = finalAmount === 0 ? "POINT" : initialType;
 
         return {
@@ -925,17 +817,11 @@
                 paymentAmount: finalAmount,
                 paymentType: paymentType
             },
-            amount: finalAmount,
             discountAmount: couponDiscountTotal,
-            usedPoint,
             paymentType
         };
     }
 
-    /** --------------------------------------- 페이먼트 결제 확장  --------------------------------------------- */
-
-    /** --------------------------------------- 토스 페이먼트 결제 --------------------------------------------- */
-    // 📌 토스 페이먼트 결제 처리
     function tossRequestPayment(payload) {
         const toss = TossPayments("test_ck_ALnQvDd2VJ2jvnEdDeLnVMj7X41m");
         const contextPath = /*[[@{/}]]*/ '';
@@ -948,12 +834,7 @@
             .then(async res => {
                 const contentType = res.headers.get("Content-Type") || "";
                 const isJson = contentType.includes("application/json");
-
-                if (!res.ok) {
-                    const errorBody = await res.text();
-                    throw new Error(errorBody);
-                }
-
+                if (!res.ok) throw new Error(await res.text());
                 return isJson ? res.json() : res.text();
             })
             .then(data => toss.requestPayment("카드", {
@@ -967,12 +848,7 @@
             .catch(handlePaymentError);
     }
 
-    /** --------------------------------------- 0원 결제 --------------------------------------------- */
-    // 📌 0원 결제시 모달 열기
     function openZeroPaymentModal(usedPoint, discountAmount) {
-        console.log('✅ 0원 결제 모달 열기 시도');
-
-        // 신규 (영수증용)
         const productTotal = document.querySelector('[data-role="product-total"]').textContent;
         const shippingFee = document.querySelector('[data-role="shipping-fee"]').textContent;
         const packagingTotal = document.querySelector('[data-role="packaging-total"]').textContent;
@@ -986,12 +862,10 @@
         document.getElementById('zeroPaymentModal').classList.remove('hidden');
     }
 
-    // 📌 0원 결제시 모달 닫기
     function closeZeroModal() {
         document.getElementById("zeroPaymentModal").classList.add("hidden");
     }
 
-    // 📌 0원 결제
     function submitZeroPayment() {
         const payload = window.__cachedZeroPayload;
         const contextPath = /*[[@{/}]]*/ '';
@@ -1004,12 +878,7 @@
             .then(async res => {
                 const contentType = res.headers.get("Content-Type") || "";
                 const isJson = contentType.includes("application/json");
-
-                if (!res.ok) {
-                    const errorBody = await res.text();
-                    throw new Error(errorBody);
-                }
-
+                if (!res.ok) throw new Error(await res.text());
                 return isJson ? res.json() : res.text();
             })
             .then(html => {
@@ -1020,8 +889,6 @@
             .catch(handlePaymentError);
     }
 
-    /** --------------------------------------- 결제 에러 처리 --------------------------------------------- */
-    // 📌 공통 에러 처리
     function handlePaymentError(err) {
         console.log("🔥 error 메세지:", err.message);
         const errorMessage = err.message || "";
@@ -1042,11 +909,10 @@
             console.warn("에러 JSON 파싱 실패:", e);
         }
 
-        if (err.code === "USER_CANCEL") {
-            alert("결제를 취소했습니다.");
-        } else {
-            alert("결제 중 오류가 발생했습니다.");
-        }
+        if (err.code === "USER_CANCEL") alert("결제를 취소했습니다.");
+        else alert("결제 중 오류가 발생했습니다.");
     }
-
 </script>
+
+</body>
+</html>
