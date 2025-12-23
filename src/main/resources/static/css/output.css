@@ -2410,8 +2410,8 @@
 .ink-card-white {
   border-radius: var(--radius-lg);
   background-color: var(--color-white);
-  --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08),
+              0 6px 18px rgba(0,0,0,0.08);
 }
 .ink-page-item {
   display: block;
